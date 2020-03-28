@@ -1,8 +1,5 @@
 def label = "slave-${UUID.randomUUID().toString()}"
-def imageTag = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-def dockerRegistryUrl = "registry.bidduo.cn"
-def imageEndpoint = "course/polling-app-server"
-def image = "${dockerRegistryUrl}/${imageEndpoint}"
+
 
 podTemplate(label: label, serviceAccount: "jk", containers: [
   containerTemplate(name: 'maven', image: 'maven:3.6-alpine', command: 'cat', ttyEnabled: true),
