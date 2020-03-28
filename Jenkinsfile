@@ -41,11 +41,11 @@ podTemplate(label: label, serviceAccount: "jk", containers: [
         passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
           container('docker') {
             echo "3. 构建 Docker 镜像阶段"
-            sh """
+            sh '''
             docker login ${dockerRegistryUrl} -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
             docker build -t ${image}:${imageTag} .
             docker push ${image}:${imageTag}
-            """
+            '''
             }
         }
     }
