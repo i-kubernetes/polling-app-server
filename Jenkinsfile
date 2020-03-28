@@ -49,10 +49,15 @@ podTemplate(label: label, serviceAccount: "jk", containers: [
         }
     }
     stage('运行 Kubectl') {
-      container('kubectl') {
-        echo "查看 K8S 集群 Pod 列表"
-        sh "kubectl get pods"
-      }
+    container('kubectl') {
+      echo "查看 K8S 集群 Pod 列表"
+      sh "kubectl get pods"
+      sh """
+        sed -i "s/<IMAGE>/${image}" manifests/k8s.yaml
+        sed -i "s/<IMAGE_TAG>/${imageTag}" manifests/k8s.yaml
+        kubectl apply -f k8s.yaml
+      """
+    }
     }
     stage('运行 Helm') {
       container('helm') {
