@@ -41,11 +41,11 @@ podTemplate(label: label, serviceAccount: "jk", containers: [
         passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
           container('docker') {
             echo "3. 构建 Docker 镜像阶段"
-            sh '''
+            sh """
             docker login ${dockerRegistryUrl} -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
             docker build -t ${image}:${imageTag} .
             docker push ${image}:${imageTag}
-            '''
+            """
             }
         }
     }
@@ -54,8 +54,8 @@ podTemplate(label: label, serviceAccount: "jk", containers: [
       echo "查看 K8S 集群 Pod 列表"
       sh "kubectl get pods"
       sh """
-        sed -i "s/<IMAGE>/${image}/" manifests/k8s.yaml
-        sed -i "s/<IMAGE_TAG>/${imageTag}/" manifests/k8s.yaml
+        sed -i s/<IMAGE>/${image}/ manifests/k8s.yaml
+        sed -i s/<IMAGE_TAG>/${imageTag}/ manifests/k8s.yaml
         kubectl apply -f k8s.yaml
       """
     }
